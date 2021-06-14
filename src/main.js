@@ -37,7 +37,7 @@ router.beforeEach((to, form, next) => {
     next({path: '/Login'});
   }
   // 如果请求的是登录页
-  else if (to.path == '/Login') {
+  else if (to.path == '/login') {
     if (isLogin != null) {
       // 跳转到首页
       next({path: '/home'});
@@ -46,7 +46,7 @@ router.beforeEach((to, form, next) => {
   // 如果为非登录状态
   else if (isLogin == null) {
     // 跳转到登录页
-    next({path: '/Login'});
+    next({path: '/login'});
   }
   // 下一个路由
   next();

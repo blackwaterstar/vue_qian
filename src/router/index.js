@@ -38,7 +38,7 @@ export default new Router({
       component:Cart
     },
     {
-      path:'/Login',
+      path:'/login',
       name:'Login',
       component:Login
     },
