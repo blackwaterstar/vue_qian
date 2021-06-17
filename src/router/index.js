@@ -8,7 +8,8 @@ import Cart from '../components/Cart'
 import Login from '../components/Login'
 import Orders from '../components/Orders'
 import Pay from '../components/Pay'
-
+import Register from "../components/Register";
+import UserManage from "../components/UserManage";
 
 // 安装路由
 Vue.use(Router);
@@ -48,9 +49,19 @@ export default new Router({
       component:Orders
     },
     {
+      path:'/register',
+      name:'Register',
+      component:Register
+    },
+    {
       path:'/pay',
       name:'Pay',
       component:Pay
+    },
+    {
+      path:'/usermanage',
+      name:'UserManage',
+      component:UserManage
     }
   ]
 });

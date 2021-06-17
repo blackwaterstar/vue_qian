@@ -15,7 +15,8 @@
         <el-form-item>
           <el-button type="primary" @click="onSubmit('form')">登录</el-button>
           &nbsp;  &nbsp;  &nbsp;  &nbsp;  &nbsp;  &nbsp;
-          <el-button type="primary" @click="">注册</el-button>
+          <el-button type="primary" @click="Register()">注册</el-button>
+<!--          <router-link to="/register">注册</router-link>-->
         </el-form-item>
 
       </el-form>
@@ -25,6 +26,7 @@
 </template>
 
 <script>
+
     export default {
         name: "Login",
         data() {
@@ -46,6 +48,11 @@
           }
         },
         methods:{
+          Register()
+          {
+
+            this.$router.push("/register")
+          },
           onSubmit(formName){
             var vm = this;
             this.$refs[formName].validate((valid) => {
@@ -98,6 +105,7 @@
 
 
           }
+
         }
     }
 </script>

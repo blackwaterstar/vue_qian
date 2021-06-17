@@ -6,13 +6,15 @@ import ElementUI from 'element-ui';
 import 'element-ui/lib/theme-chalk/index.css';
 
 import App from './App'
-import axios from 'axios'
-
+import qs from 'qs'
 import VueRouter from 'vue-router'
 import router from './router'
+import axios from 'axios'
 import Vuex from 'vuex'
 import store from './store'
 
+Vue.prototype.qs = qs;
+Vue.prototype.axios = axios;
 axios.defaults.baseURL = "http://localhost:8080/ssm/"
 Vue.use(Vuex)
 
@@ -22,7 +24,7 @@ Vue.use(VueRouter);
 Vue.use(ElementUI);
 
 
-Vue.prototype.axios = axios;
+
 
 // 在跳转前执行
 router.beforeEach((to, form, next) => {
@@ -45,8 +47,10 @@ router.beforeEach((to, form, next) => {
   }
   // 如果为非登录状态
   else if (isLogin == null) {
-    // 跳转到登录页
-    next({path: '/login'});
+    if(to.path!='/register'){
+      // 跳转到登录页
+      next({path: '/login'});
+    }
   }
   // 下一个路由
   next();

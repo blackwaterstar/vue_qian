@@ -18,7 +18,11 @@ export default {
   methods: {
     saveState() {
       sessionStorage.setItem('state', JSON.stringify(this.$store.state));
-    }
+    },
+    created() {
+      this.$store.dispatch('allProducts')
+    },
+//store/index.js
   }
 }
 </script>
