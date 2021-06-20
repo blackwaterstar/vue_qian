@@ -147,43 +147,6 @@
                     :append-to-body='true'
                     :visible.sync="dialogUpdate"
                     :before-close="handleClose">
-<!--                <el-form-item label="证件类型">-->
-<!--                    <el-select v-model="ruleForm.userId" placeholder="请选择证件类型" prop="cardType">-->
-<!--                        <el-option label="身份证" value="身份证"></el-option>-->
-<!--                        <el-option label="军官证" value="军官证"></el-option>-->
-<!--                        <el-option label="护照" value="护照"></el-option>-->
-<!--                        <el-option label="港澳居民通行证" value="港澳居民通行证"></el-option>-->
-<!--                        <el-option label="台湾往来大陆通行证" value="台湾往来大陆通行证"></el-option>-->
-<!--                    </el-select>-->
-<!--                </el-form-item>-->
-<!--                <el-form-item label="证件号码">-->
-<!--                    <el-input v-model="ruleForm.userNickname"></el-input>-->
-<!--                </el-form-item>-->
-<!--                <el-form-item label="用户姓名">-->
-<!--                    <el-input v-model="ruleForm.userPwd"></el-input>-->
-<!--                </el-form-item>-->
-<!--                <el-form-item label="用户性别">-->
-<!--                    <el-radio-group v-model="ruleForm.userEmail">-->
-<!--                        <el-radio label="男"></el-radio>-->
-<!--                        <el-radio label="女"></el-radio>-->
-<!--                    </el-radio-group>-->
-<!--                </el-form-item>-->
-<!--                <el-form-item label="用户年龄">-->
-<!--                    <el-slider v-model="ruleForm.userTel" show-input></el-slider>-->
-<!--                </el-form-item>-->
-<!--                <el-form-item label="用户角色">-->
-<!--                    <el-select v-model="ruleForm.userFlag" placeholder="请选择用户角色" prop="userRole">-->
-<!--                        <el-option label="国家机关、党群组织、企业、事业单位负责人" value="国家机关、党群组织、企业、事业单位负责人"></el-option>-->
-<!--                        <el-option label="专业技术人员" value="专业技术人员"></el-option>-->
-<!--                        <el-option label="办事人员和有关人员" value="办事人员和有关人员"></el-option>-->
-<!--                        <el-option label="商业、服务业人员" value="商业、服务业人员"></el-option>-->
-<!--                        <el-option label="农、林、牧、渔、水利业生产人员" value="农、林、牧、渔、水利业生产人员"></el-option>-->
-<!--                        <el-option label="生产、运输设备操作人员及有关人员" value="生产、运输设备操作人员及有关人员"></el-option>-->
-<!--                        <el-option label="军人" value="军人"></el-option>-->
-<!--                        <el-option label="不便分类的其他从业人员" value="不便分类的其他从业人员"></el-option>-->
-<!--                        <el-option label="未知" value="未知"></el-option>-->
-<!--                    </el-select>-->
-<!--                </el-form-item>-->
               <el-form-item label="账号">
                 <el-input v-model="ruleForm.userId" disabled></el-input>
               </el-form-item>
@@ -225,13 +188,13 @@
         data() {
             return {
                 ruleForm: {
-                    tuId: null,//用户id
-                    userId: null,//证件类型
-                    userNickname: null,//证件号码
-                    userPwd: null,//用户姓名
-                    userEmail: null,//用户性别
-                    userTel: null,//用户年龄
-                    userFlag: null//用户角色
+                    tuId: null,
+                    userId: null,
+                    userNickname: null,
+                    userPwd: null,
+                    userEmail: null,
+                    userTel: null,
+                    userFlag: null
                 },
                 rules: {},
                 tableData: [],
@@ -314,18 +277,11 @@
                     return;
                 }
                 let postData = this.qs.stringify({
-                    // cardType: this.ruleForm.cardType,//证件类型
-                    // cardNo: this.ruleForm.cardNo,//证件号码
-                    // userName: this.ruleForm.userName,//用户姓名
-                    // userSex: this.ruleForm.userSex,//用户性别
-                    // userAge: this.ruleForm.userAge,//用户年龄
-                    // userRole: this.ruleForm.userRole,//用户角色
-                 // userId: this.ruleForm.userId,//证件类型
+                  userId: this.ruleForm.userId,
                   userNickname: this.ruleForm.userNickname,//证件号码
                   userPwd: this.ruleForm.userPwd,//用户姓名
                   userEmail: this.ruleForm.userEmail,//用户性别
                   userTel: this.ruleForm.userTel,//用户年龄
-                  userFlag: this.ruleForm.userFlag,//用户角色
                 });
                 this.axios({
                     method: 'post',
@@ -413,7 +369,7 @@
                   userNickname: null,//证件号码
                   userPwd: null,//用户姓名
                   userEmail: null,//用户性别
-                  userTel: null,//用户年龄
+                  userId: null,//用户年龄
                   userFlag: null//用户角色
                 };
             },

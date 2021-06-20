@@ -67,7 +67,7 @@
 
       <div style="margin-top: 20px">
         <el-button class="el-button--danger" @click="createOrder">提交订单</el-button>
-        <el-button class="el-button--success" @click="">返回</el-button>
+        <el-button class="el-button--success" @click="returnPage">返回</el-button>
       </div>
 
 
@@ -85,19 +85,21 @@ export default {
     name: "Cart",
   data() {
     return {
-      tableData: [{
-        pname: 'HUAWEI P30',
-        price: '6778',
-        pcount: 2
-      }, {
-        pname: 'IPHONE X',
-        price: '5778',
-        pcount: 3
-      },{
-        pname: 'NOTE3',
-        price: '3778',
-        pcount: 1
-      }],
+      tableData: [
+      //   {
+      //   pname: '',
+      //   price: '',
+      //   pcount: ''
+      // }, {
+      //   pname: '',
+      //   price: '',
+      //   pcount: ''
+      // },{
+      //   pname: '',
+      //   price: '',
+      //   pcount: ''
+      // }
+      ],
       userId: this.$route.params.userId,
       pid: this.$route.params.pid,
       pcount: this.$route.params.pcount,
@@ -136,7 +138,7 @@ export default {
       var vm = this;
       this.axios({
         method: 'POST',
-        url: 'http://localhost/order/addOrder',
+        url: '/order/addOrder',
         transformRequest: [function (data) {
           return Qs.stringify(data)
         }],
@@ -190,8 +192,16 @@ export default {
         vm.tableData = resp.data
       })
 
+    },
+    // 返回上一级
+    returnPage(){
+      if (window.history.length <= 1) {
+        this.$router.push({ path: "/system/storageManagement" });
+        return false;
+      } else {
+        this.$router.go(-1);
+      }
     }
-
 
   }
 }

@@ -3,8 +3,8 @@
 <!--    <div>-->
       <el-form ref="form"  :rules="rules" :model="form" label-width="80px" class="login-box">
         <h3 class="login-title">欢迎登录</h3>
-        <el-form-item label="账号" prop="userTel" >
-          <el-input v-model="form.userTel" placeholder="请输入用户名"></el-input>
+        <el-form-item label="账号" prop="userId" >
+          <el-input v-model="form.userId" placeholder="请输入用户名"></el-input>
         </el-form-item>
 
         <el-form-item label="密码" prop="userPwd">
@@ -32,13 +32,13 @@
         data() {
           return {
             form: {
-              userTel: '',
+              userId: '',
               userPwd: ''
             },
             rules:{
-              userTel: [
+              userId: [
                 { required: true, message: '请输入账号', trigger: 'blur' },
-                { min: 11, max: 11, message: '长度必须是11个数字', trigger: 'blur' }
+                { min: 6, max: 11, message: '长度必须是6-11个数字', trigger: 'blur' }
               ],
               userPwd: [
                 { required: true, message: '请输入密码', trigger: 'blur' },
@@ -60,7 +60,7 @@
                 //表单验证成功，要发送登录请求
                 this.axios({
                   method: 'GET',
-                  url: '/user/login?userTel='+vm.form.userTel+'&userPwd='+vm.form.userPwd
+                  url: '/user/login?userId='+vm.form.userId+'&userPwd='+vm.form.userPwd
                 }).then(function(resp){
 
 

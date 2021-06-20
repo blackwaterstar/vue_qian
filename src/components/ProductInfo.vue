@@ -109,35 +109,33 @@ export default {
         pimg:this.$route.query.pimg
       },
       count: 1
-
     }
 
   },
   created() {
     this.getProduct();
-
   },
   methods: {
     getProduct() {
-
       var vm = this;
+      let postData1 = vm.qs.stringify({
+        pid:vm.pid
+      });
       this.axios({
-
-        method: 'GET',
-        url: '/product/getProductById?pid=' + vm.pid
-
+        method: 'POST',
+        url: '/product/getProductById',
+        data: postData1
       }).then(function (resp) {
         vm.pro = resp.data;
       })
     },
+
     gtCart: function () {
       var p = {
         userId: this.$store.getters.getUser.userId,
         pid: this.pro.pid,
         pcount: this.count
-
       };
-
       this.$router.push({name: 'Cart', params: p});
     }
   }
@@ -149,7 +147,6 @@ export default {
     font-family: "微软雅黑";
 
   }
-
 
   .sc .el-col {
     padding: 0px;
@@ -178,7 +175,6 @@ export default {
     text-align: center;
 
   }
-
 
   .el-main {
     background-color: #fff;

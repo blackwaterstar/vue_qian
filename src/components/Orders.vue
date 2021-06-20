@@ -63,17 +63,12 @@ export default {
 
       },
     pay(order){
-
         var d = {
           orderId:order.orderId,
           orderPrice:order.orderPrice
         }
-
         this.$router.push({name:'Pay',params:d})
-
-
     }
-
   }
 }
 </script>

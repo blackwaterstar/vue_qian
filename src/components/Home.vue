@@ -1,8 +1,5 @@
 <template>
   <el-container>
-
-
-
     <el-header height="60px">
       <el-col :span="12"><div class="grid-content bg-purple" align="left">
         <img src="../assets/logo.png" width="150px" height="50px">
@@ -21,10 +18,8 @@
       <div class="block" >
 
         <el-carousel indicator-position="none" height="350px">
-          <el-carousel-item v-for="item in imgs" >
-
+          <el-carousel-item v-for="item in imgs"  v-bind:key="item">
             <img :src="item">
-
           </el-carousel-item>
         </el-carousel>
       </div>
