@@ -1,0 +1,546 @@
+<template>
+  <div>
+    <el-form :inline="true" class="demo-form-inline">
+      <el-form-item>
+        <el-input
+          v-model="search1"
+          size="mini"
+          placeholder="输入姓名查询" v-on:input="handleSearch()">
+        </el-input>
+      </el-form-item>
+      <el-form-item>
+        <el-input
+          v-model="search2"
+          size="mini"
+          placeholder="输入手机号码查询" v-on:input="handleSearch()">
+        </el-input>
+      </el-form-item>
+      <el-form-item>
+        <el-button
+          class="el-icon-circle-plus-outline"
+          type="text"
+          @click="dialogAdd = true">添加
+        </el-button>
+      </el-form-item>
+      <el-form-item>
+        <el-button
+          class="el-icon-delete"
+          type="text"
+          @click="handleDeleteList()">删除
+        </el-button>
+      </el-form-item>
+    </el-form>
+
+    <el-table
+      ref="multipleTable"
+      :data="tableData"
+      border
+      highlight-current-row
+      style="width: 100%"
+      @selection-change="handleSelectionDelete">
+      <el-table-column
+        type="selection"
+        width="55">
+      </el-table-column>
+      <el-table-column
+        label="仓库编号">
+        <template slot-scope="scope">
+          <span>{{ scope.row.twId }}</span>
+        </template>
+      </el-table-column>
+      <el-table-column
+        label="类别id">
+        <template slot-scope="scope">
+          <span>{{ scope.row.tid }}</span>
+        </template>
+      </el-table-column>
+      <el-table-column
+        label="商品id">
+        <template slot-scope="scope">
+          <span>{{ scope.row.pid }}</span>
+        </template>
+      </el-table-column>
+      <el-table-column
+        label="商品名">
+        <template slot-scope="scope">
+          <el-popover trigger="hover" placement="right">
+            <p>仓库编号: {{ scope.row.twId }}</p>
+            <p>类别id: {{ scope.row.tid }}</p>
+            <p>商品id：{{ scope.row.pid }}</p>
+            <p>商品名: {{ scope.row.pname}}</p>
+            <p>商品数量: {{ scope.row.pcount }}</p>
+            <p>是否上架：{{ scope.row.pshelf }}</p>
+            <div slot="reference" class="name-wrapper">
+              <el-button type="text">{{ scope.row.pname }}</el-button>
+            </div>
+          </el-popover>
+        </template>
+      </el-table-column>
+
+
+      <el-table-column
+        label="商品数量">
+        <template slot-scope="scope">
+          <span>{{ scope.row.pcount}}</span>
+        </template>
+      </el-table-column>
+      <el-table-column
+        label="是否上架">
+        <template slot-scope="scope">
+          <span>{{ scope.row.pshelf }}</span>
+        </template>
+      </el-table-column>
+      <el-table-column
+        label="操作">
+        <template slot-scope="scope">
+          <el-button
+            type="text"
+            icon="el-icon-edit"
+            @click="handleEdit(scope.$index, scope.row)">编辑
+          </el-button>
+          <el-button
+            type="text"
+            icon="el-icon-delete"
+            @click="handleDelete(scope.$index, scope.row)">删除
+          </el-button>
+        </template>
+      </el-table-column>
+    </el-table>
+
+    <el-form :model="ruleForm" :rules="rules" ref="ruleForm" label-width="80px" class="demo-ruleForm" size="medium">
+      <el-dialog
+        title="添加"
+        :append-to-body='true'
+        :visible.sync="dialogAdd"
+        :before-close="handleClose">
+<!--        <el-form-item label="商品类别">-->
+<!--          <el-input v-model="ruleForm.tid"></el-input>-->
+<!--        </el-form-item>-->
+                <el-form-item>
+                  <el-select size="mini" v-model="ruleForm.tid" placeholder="请选择" >
+                    <el-option v-for="item in depss" :key="item.id" :label="item.name" :value="item.name"/>
+                  </el-select>
+                </el-form-item>
+        <el-form-item label="商品id">
+          <el-input v-model="ruleForm.pid" placeholder="请输入邮箱"></el-input>
+        </el-form-item>
+        <el-form-item label="商品名称">
+          <el-input v-model="ruleForm.pname"></el-input>
+        </el-form-item>
+        <el-form-item label="商品数量">
+          <el-input v-model="ruleForm.pcount"></el-input>
+        </el-form-item>
+
+<!--        <el-form-item>-->
+<!--          <el-select size="mini" v-model="ruleForm.pshelf" v-on:change="handleSearch()">-->
+<!--            <el-option label="请选择性别" value=""></el-option>-->
+<!--            <el-option label="已上架" value="已上架"></el-option>-->
+<!--            <el-option label="未上架" value="未上架"></el-option>-->
+<!--          </el-select>-->
+<!--          -->
+<!--        </el-form-item>-->
+        <span slot="footer" class="dialog-footer">
+            <el-button @click="emptyUserData()" size="medium">取 消</el-button>
+            <el-button @click="addUser('ruleForm')" type="primary" size="medium">确 定</el-button>
+          </span>
+      </el-dialog>
+    </el-form>
+
+    <el-form :model="ruleForm" :rules="rules" ref="ruleForm" label-width="70px" class="demo-ruleForm" size="medium">
+      <el-dialog
+        title="编辑"
+        :append-to-body='true'
+        :visible.sync="dialogUpdate"
+        :before-close="handleClose">
+<!--        <el-form-item label="账号">-->
+<!--          <el-input v-model="ruleForm.tid" disabled></el-input>-->
+<!--        </el-form-item>-->
+<!--        <el-form-item label="姓名">-->
+<!--          <el-input v-model="ruleForm.pname"></el-input>-->
+<!--        </el-form-item>-->
+<!--        <el-form-item label="密码">-->
+<!--          <el-input v-model="ruleForm.pcount"></el-input>-->
+<!--        </el-form-item>-->
+<!--        <el-form-item label="邮箱">-->
+<!--          <el-input v-model="ruleForm.pid" placeholder="请输入邮箱"></el-input>-->
+<!--        </el-form-item>-->
+<!--        <el-form-item label="手机"><el-input v-model="ruleForm.pshelf" placeholder="请输入手机号码"></el-input>-->
+
+<!--        </el-form-item>-->
+        <el-form-item label="商品类别">
+          <el-input v-model="ruleForm.tid"></el-input>
+        </el-form-item>
+        <el-form-item label="商品id">
+          <el-input v-model="ruleForm.pid" placeholder="请输入邮箱"></el-input>
+        </el-form-item>
+        <el-form-item label="商品名称">
+          <el-input v-model="ruleForm.pname"></el-input>
+        </el-form-item>
+        <el-form-item label="商品数量">
+          <el-input v-model="ruleForm.pcount"></el-input>
+        </el-form-item>
+        <span slot="footer" class="dialog-footer">
+            <el-button @click="emptyUserData()" size="medium">取 消</el-button>
+            <el-button @click="updateUser()" type="primary" size="medium">确 定</el-button>
+          </span>
+      </el-dialog>
+    </el-form>
+    <br>
+
+    <el-pagination
+      background
+      :disabled="disablePage"
+      :current-page.sync="currentPage"
+      small
+      layout="prev, pager, next"
+      :page-size="pageSize"
+      :total="total"
+      @current-change="handlePageChange">
+    </el-pagination>
+  </div>
+</template>
+
+<script>
+  export default {
+    data() {
+      return {
+        depss:[],
+        ruleForm: {
+          twId: null,
+          tid: null,
+          pname: null,
+          pcount: null,
+          pid: null,
+          pshelf: null,
+        },
+        rules: {},
+        tableData: [],
+        search1: '',
+        search2: '',
+        dialogAdd: false,
+        dialogUpdate: false,
+        pageSize: 10,
+        currentPage: 1,
+        total: 0,
+        disablePage: false,
+        multipleSelection: []
+      };
+    },
+
+    created() {
+      let postData1 = this.qs.stringify({
+        page: this.currentPage,
+        tid: this.search1,
+        pid: this.search2
+      });
+      this.axios({
+        method: 'post',
+        url: '/warehouse/selectTwPage',
+        data: postData1
+      }).then(response => {
+        this.tableData = response.data;
+      }).catch(error => {
+        console.log(error);
+      });
+
+      let postData = this.qs.stringify({
+        tid: this.search1,
+        pid: this.search2
+      });
+      this.axios({
+        method: 'post',
+        url: '/warehouse/getRowCount',
+        data: postData
+      }).then(response => {
+        this.total = response.data;
+      }).catch(error => {
+        console.log(error);
+      });
+
+      this.getDep();
+
+    },
+
+
+    methods: {
+
+      getDep:function(){
+        var vm = this;
+        this.axios({
+          method:'post',
+          url: '/type/getAllTid'
+        }).then(function(resp){
+          vm.depss = resp.data;
+          console.log(resp.data);
+
+        })
+      },
+
+      /**
+       * 分页
+       */
+      handlePageChange() {
+
+        let postData = this.qs.stringify({
+          page: this.currentPage,
+          tid: this.search1,
+          pid: this.search2
+        });
+        console.log(`当前页: ${this.currentPage}`);
+        this.axios({
+          method: 'post',
+          url: '/warehouse/selectTwPage',
+          data: postData
+        }).then(response => {
+          this.tableData = response.data;
+        }).catch(error => {
+          console.log(error);
+        });
+
+      },
+
+      /**
+       * 添加
+       */
+      addUser() {
+        if (this.ruleForm.tid == null || this.ruleForm.pname == null || this.ruleForm.pcount == null || this.ruleForm.pid == null ) {
+          this.$alert('用户信息不完整请检查', '温馨提示', {
+            confirmButtonText: '确定'
+          });
+          return;
+        }
+        let postData = this.qs.stringify({
+          tid: this.ruleForm.tid,
+          pid: this.ruleForm.pid,
+          pname: this.ruleForm.pname,
+          pcount: this.ruleForm.pcount,
+          pshelf: this.ruleForm.pshelf
+        });
+        this.axios({
+          method: 'post',
+          url: '/warehouse/createTw',
+          data: postData
+        }).then(response => {
+          this.handlePageChange();
+          this.getRowCount();
+          this.$message({
+            type: 'success',
+            message: '已添加!'
+          });
+          this.emptyUserData();
+          //console.log(response);
+        }).catch(error => {
+          console.log(error);
+        });
+      },
+
+      /**
+       * 统计用户个数
+       */
+      getRowCount() {
+        let postData = this.qs.stringify({
+          userId: this.search1,
+          userNickname: this.search2
+        });
+        this.axios({
+          method: 'post',
+          url: '/warehouse/getRowCount',
+          data: postData
+        }).then(response => {
+          this.total = response.data;
+        }).catch(error => {
+          console.log(error);
+        });
+      },
+
+      handleSearch() {
+        let postData = this.qs.stringify({
+          userId: this.search1,
+          userNickname: this.search2
+        });
+        this.axios({
+          method: 'post',
+          url: '/warehouse/getRowCount',
+          data: postData
+        }).then(response => {
+          this.total = response.data;
+          let countPage = Math.ceil(this.total/5);
+          if (countPage <= this.currentPage) {
+            this.currentPage = countPage;
+          }
+          this.handlePageChange();
+        }).catch(error => {
+          console.log(error);
+        });
+      },
+
+      handleEdit(index, row) {
+        this.dialogUpdate = true;
+        row.tuId = Number(row.tuId);
+        this.ruleForm = Object.assign({}, row, index); //这句是关键！！！
+      },
+
+      handleClose(done) {
+        this.$confirm('确认关闭？')
+          .then(_ => {
+            done();
+            this.emptyUserData();
+          })
+          .catch(_ => {
+          });
+      },
+
+      /**
+       * 清空绑定数据
+       */
+      emptyUserData() {
+        this.dialogAdd = false;
+        this.dialogUpdate = false;
+        this.ruleForm = {
+          tid: null,
+          pname: null,
+          pcount: null,
+          pid: null,
+          pshelf: null,
+        };
+      },
+
+      /**
+       * 根据 userId 删除用户
+       * @param index
+       * @param row
+       */
+      handleDelete(index, row) {
+        //console.log(index, row);
+        this.$confirm('删除操作, 是否继续?', '提示', {
+          confirmButtonText: '确定',
+          cancelButtonText: '取消',
+          type: 'warning'
+        }).then(() => {
+          let postData = this.qs.stringify({
+            tuId: row.tuId,
+          });
+          this.axios({
+            method: 'post',
+            url: '/warehouse/deleteUserById',
+            data: postData
+          }).then(response => {
+            this.getRowCount();
+            if (this.total % 10 == 1 && this.currentPage >= 1) {
+              if (this.total / 10 < this.currentPage) {
+                this.currentPage = this.currentPage - 1;
+              }
+            }
+            this.handlePageChange();
+
+            this.$message({
+              type: 'success',
+              message: '删除成功!'
+            });
+            //console.log(response);
+          }).catch(error => {
+            console.log(error);
+          });
+
+        }).catch(() => {
+          this.$message({
+            type: 'info',
+            message: '已取消删除'
+          });
+        });
+      },
+
+      handleSelectionDelete(val) {
+        this.multipleSelection = val;
+      },
+
+      /**
+       * 根据 userId 批量删除用户
+       */
+      handleDeleteList() {
+        let tuIds = "";
+        this.multipleSelection.forEach(item => {
+          tuIds += item.tuId + ',';
+
+        })
+        console.log(tuIds);
+        // let userIds= this.multipleSelection.map(item => item.userId).join()
+
+        this.$confirm('删除操作, 是否继续?', '提示', {
+          confirmButtonText: '确定',
+          cancelButtonText: '取消',
+          type: 'warning'
+        }).then(() => {
+          let postData = this.qs.stringify({
+            tuIdList: tuIds
+          });
+          console.log(postData);
+          this.axios({
+            method: 'post',
+            url: '/warehouse/deleteUserByIdList',
+            data: postData
+          }).then(response => {
+            this.getRowCount();
+            if (this.total % 10 == 1 && this.currentPage >= 1) {
+              if (this.total / 10 < this.currentPage) {
+                this.currentPage = this.currentPage - 1;
+              }
+            }
+            this.handlePageChange();
+
+            this.$message({
+              type: 'success',
+              message: '删除成功!'
+            });
+            //console.log(response);
+          }).catch(error => {
+            console.log(error);
+          });
+
+        }).catch(() => {
+          this.$message({
+            type: 'info',
+            message: '已取消删除'
+          });
+        });
+      },
+
+
+      updateUser() {
+        if (this.ruleForm.tid == null || this.ruleForm.pname == null || this.ruleForm.pcount == null || this.ruleForm.pid == null ) {
+          this.$alert('用户信息不完整请检查', '温馨提示', {
+            confirmButtonText: '确定'
+          });
+          return;
+        }
+        let postData = this.qs.stringify({
+          tid: this.ruleForm.tid,
+          pid: this.ruleForm.pid,
+          pname: this.ruleForm.pname,
+          pcount: this.ruleForm.pcount,
+          pshelf: this.ruleForm.pshelf
+        });
+        this.axios({
+          method: 'post',
+          url: '/warehouse/updateUserById',
+          data: postData
+        }).then(response => {
+          this.handlePageChange();
+          this.getRowCount();
+          this.$message({
+            type: 'success',
+            message: '已编辑!'
+          });
+          this.emptyUserData();
+          //console.log(response);
+        }).catch(error => {
+          console.log(error);
+        });
+      }
+    },
+
+  }
+</script>
+<style scoped>
+
+</style>

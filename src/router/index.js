@@ -10,6 +10,7 @@ import Orders from '../components/Orders'
 import Pay from '../components/Pay'
 import Register from "../components/Register";
 import UserManage from "../components/UserManage";
+import Warehouse from "../components/Warehouse";
 
 // 安装路由
 Vue.use(Router);
@@ -22,6 +23,11 @@ export default new Router({
       path:'/home',
       name:'Home',
       component:Home
+    },
+    {
+      path:'/warehouse',
+      name:'Warehouse',
+      component:Warehouse
     },
     // {
     //   path:'/productinfo/:pid',

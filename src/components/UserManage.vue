@@ -364,12 +364,12 @@
                 this.dialogAdd = false;
                 this.dialogUpdate = false;
                 this.ruleForm = {
-                  tuId: null,//用户id
-                  userId: null,//证件类型
-                  userNickname: null,//证件号码
-                  userPwd: null,//用户姓名
-                  userEmail: null,//用户性别
-                  userId: null,//用户年龄
+                  twId: null,//用户id
+                  tid: null,//证件类型
+                  pname: null,//证件号码
+                  pcount: null,//用户姓名
+                  pid: null,//用户性别
+                  tid: null,//用户年龄
                   userFlag: null//用户角色
                 };
             },

@@ -86,19 +86,6 @@ export default {
   data() {
     return {
       tableData: [
-      //   {
-      //   pname: '',
-      //   price: '',
-      //   pcount: ''
-      // }, {
-      //   pname: '',
-      //   price: '',
-      //   pcount: ''
-      // },{
-      //   pname: '',
-      //   price: '',
-      //   pcount: ''
-      // }
       ],
       userId: this.$route.params.userId,
       pid: this.$route.params.pid,
