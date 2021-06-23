@@ -1,6 +1,5 @@
 <template>
     <div>
-
       <div v-for="order in orders">
         <span>订单创建时间：{{order.createdTime}}</span>  <span>订单编号：{{order.orderId}}</span>
         <el-table
@@ -39,10 +38,8 @@ export default {
     name: "Orders",
   data(){
       return {
-
         user:this.$store.getters.getUser,
         orders:[]
-
       }
   },
   created() {
@@ -54,13 +51,9 @@ export default {
         this.axios({
           method: 'GET',
           url: '/order/list?userId='+vm.user.userId
-
-
         }).then(function(resp){
           vm.orders = resp.data;
         })
-
-
       },
     pay(order){
         var d = {

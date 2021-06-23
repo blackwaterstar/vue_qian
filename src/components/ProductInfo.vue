@@ -1,17 +1,30 @@
 <template>
   <el-container>
+<!--    <el-header height="60px">-->
+<!--      <el-col :span="12">-->
+<!--        <div class="grid-content bg-purple" align="left">-->
+<!--          <img src="../assets/logo.png" width="150px" height="50px">-->
+<!--        </div>-->
+<!--      </el-col>-->
+<!--      <el-col :span="12">-->
+<!--        <div class="grid-content bg-purple-light" align="right">-->
+<!--          <el-button plain @click="this.$router.push('/login')">登录</el-button>-->
+<!--          <el-button plain>注册</el-button>-->
+<!--        </div>-->
+<!--      </el-col>-->
+<!--    </el-header>-->
     <el-header height="60px">
-      <el-col :span="12">
-        <div class="grid-content bg-purple" align="left">
-          <img src="../assets/logo.png" width="150px" height="50px">
-        </div>
-      </el-col>
-      <el-col :span="12">
-        <div class="grid-content bg-purple-light" align="right">
-          <el-button plain @click="this.$router.push('/login')">登录</el-button>
-          <el-button plain>注册</el-button>
-        </div>
-      </el-col>
+      <el-col :span="12"><div class="grid-content bg-purple" align="left">
+        <img src="../assets/logo.png" width="150px" height="50px">
+      </div></el-col>
+      <el-col v-if="!islogin" :span="12"><div class="grid-content bg-purple-light" align="right">
+        <el-button plain @click="$router.push('/Login')">登录</el-button>
+        <el-button plain>注册</el-button>
+      </div></el-col>
+      <el-col v-if="islogin" :span="12"><div class="grid-content bg-purple-light" align="right">
+        <span>欢迎你，{{username}}</span>
+        <el-button plain @click="$router.push('/logout')">注销</el-button>
+      </div></el-col>
     </el-header>
     <el-main>
 
@@ -108,7 +121,9 @@ export default {
        // pimg:''
         pimg:this.$route.query.pimg
       },
-      count: 1
+      count: 1,
+      username:this.$store.getters.getUser.userNickname,
+      islogin: this.$store.getters.getUser==null?false:true
     }
 
   },

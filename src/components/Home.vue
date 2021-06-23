@@ -83,6 +83,7 @@ export default {
         url: '/product/list'
       }).then(function(resp){
         vm.pros = resp.data;
+        console.log(resp.data);
 
       })
     },

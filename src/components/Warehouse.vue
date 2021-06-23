@@ -5,15 +5,25 @@
         <el-input
           v-model="search1"
           size="mini"
-          placeholder="输入姓名查询" v-on:input="handleSearch()">
+          placeholder="输入商品名查询" v-on:input="handleSearch()">
         </el-input>
       </el-form-item>
+<!--      <el-form-item>-->
+<!--        <el-input-->
+<!--          v-model="search2"-->
+<!--          size="mini"-->
+<!--          placeholder="输入手机号码查询" v-on:input="handleSearch()">-->
+<!--        </el-input>-->
+<!--      </el-form-item>-->
       <el-form-item>
-        <el-input
-          v-model="search2"
-          size="mini"
-          placeholder="输入手机号码查询" v-on:input="handleSearch()">
-        </el-input>
+        <el-select size="big" v-model="search2" clearable placeholder="请选择" filterable v-on:input="handleSearch()">
+          <el-option
+            v-for="type in types"
+            :key="type.tid"
+            :label="type.tname"
+            :value="type.tid">
+          </el-option>
+        </el-select>
       </el-form-item>
       <el-form-item>
         <el-button
@@ -113,16 +123,18 @@
         :append-to-body='true'
         :visible.sync="dialogAdd"
         :before-close="handleClose">
-<!--        <el-form-item label="商品类别">-->
-<!--          <el-input v-model="ruleForm.tid"></el-input>-->
-<!--        </el-form-item>-->
-                <el-form-item>
-                  <el-select size="mini" v-model="ruleForm.tid" placeholder="请选择" >
-                    <el-option v-for="item in depss" :key="item.id" :label="item.name" :value="item.name"/>
+                <el-form-item label="商品类别">
+                  <el-select size="big" v-model="ruleForm.tid" clearable placeholder="请选择" filterable>
+                    <el-option
+                      v-for="type in types"
+                      :key="type.tid"
+                      :label="type.tname"
+                      :value="type.tid">
+                    </el-option>
                   </el-select>
                 </el-form-item>
         <el-form-item label="商品id">
-          <el-input v-model="ruleForm.pid" placeholder="请输入邮箱"></el-input>
+          <el-input v-model="ruleForm.pid" placeholder="请输入商品id"></el-input>
         </el-form-item>
         <el-form-item label="商品名称">
           <el-input v-model="ruleForm.pname"></el-input>
@@ -152,26 +164,18 @@
         :append-to-body='true'
         :visible.sync="dialogUpdate"
         :before-close="handleClose">
-<!--        <el-form-item label="账号">-->
-<!--          <el-input v-model="ruleForm.tid" disabled></el-input>-->
-<!--        </el-form-item>-->
-<!--        <el-form-item label="姓名">-->
-<!--          <el-input v-model="ruleForm.pname"></el-input>-->
-<!--        </el-form-item>-->
-<!--        <el-form-item label="密码">-->
-<!--          <el-input v-model="ruleForm.pcount"></el-input>-->
-<!--        </el-form-item>-->
-<!--        <el-form-item label="邮箱">-->
-<!--          <el-input v-model="ruleForm.pid" placeholder="请输入邮箱"></el-input>-->
-<!--        </el-form-item>-->
-<!--        <el-form-item label="手机"><el-input v-model="ruleForm.pshelf" placeholder="请输入手机号码"></el-input>-->
-
-<!--        </el-form-item>-->
         <el-form-item label="商品类别">
-          <el-input v-model="ruleForm.tid"></el-input>
+          <el-select size="big" v-model="ruleForm.tid" clearable placeholder="请选择" filterable>
+            <el-option
+              v-for="type in types"
+              :key="type.tid"
+              :label="type.tname"
+              :value="type.tid">
+            </el-option>
+          </el-select>
         </el-form-item>
         <el-form-item label="商品id">
-          <el-input v-model="ruleForm.pid" placeholder="请输入邮箱"></el-input>
+          <el-input v-model="ruleForm.pid" placeholder="请输入商品id"></el-input>
         </el-form-item>
         <el-form-item label="商品名称">
           <el-input v-model="ruleForm.pname"></el-input>
@@ -204,7 +208,7 @@
   export default {
     data() {
       return {
-        depss:[],
+
         ruleForm: {
           twId: null,
           tid: null,
@@ -212,7 +216,9 @@
           pcount: null,
           pid: null,
           pshelf: null,
+
         },
+        types:null,
         rules: {},
         tableData: [],
         search1: '',
@@ -223,16 +229,18 @@
         currentPage: 1,
         total: 0,
         disablePage: false,
-        multipleSelection: []
+        multipleSelection: [],
+
       };
     },
 
     created() {
       let postData1 = this.qs.stringify({
         page: this.currentPage,
-        tid: this.search1,
-        pid: this.search2
+        pname: this.search1,
+        tid: this.search2
       });
+      console.log(postData1);
       this.axios({
         method: 'post',
         url: '/warehouse/selectTwPage',
@@ -270,8 +278,8 @@
           method:'post',
           url: '/type/getAllTid'
         }).then(function(resp){
-          vm.depss = resp.data;
-          console.log(resp.data);
+         vm.types = resp.data;
+           console.log(resp.data);
 
         })
       },
@@ -283,9 +291,10 @@
 
         let postData = this.qs.stringify({
           page: this.currentPage,
-          tid: this.search1,
-          pid: this.search2
+          pname: this.search1,
+          tid: this.search2
         });
+
         console.log(`当前页: ${this.currentPage}`);
         this.axios({
           method: 'post',
@@ -310,12 +319,14 @@
           return;
         }
         let postData = this.qs.stringify({
+          twId: this.ruleForm.twId,
           tid: this.ruleForm.tid,
           pid: this.ruleForm.pid,
           pname: this.ruleForm.pname,
           pcount: this.ruleForm.pcount,
           pshelf: this.ruleForm.pshelf
         });
+        console.log(postData);
         this.axios({
           method: 'post',
           url: '/warehouse/createTw',
@@ -355,8 +366,8 @@
 
       handleSearch() {
         let postData = this.qs.stringify({
-          userId: this.search1,
-          userNickname: this.search2
+          pname: this.search1,
+          tid: this.search2
         });
         this.axios({
           method: 'post',
@@ -364,7 +375,7 @@
           data: postData
         }).then(response => {
           this.total = response.data;
-          let countPage = Math.ceil(this.total/5);
+          let countPage = Math.ceil(this.total/10);
           if (countPage <= this.currentPage) {
             this.currentPage = countPage;
           }
@@ -418,11 +429,11 @@
           type: 'warning'
         }).then(() => {
           let postData = this.qs.stringify({
-            tuId: row.tuId,
+            twId: row.twId
           });
           this.axios({
             method: 'post',
-            url: '/warehouse/deleteUserById',
+            url: '/warehouse/deleteTwById',
             data: postData
           }).then(response => {
             this.getRowCount();
@@ -453,14 +464,13 @@
       handleSelectionDelete(val) {
         this.multipleSelection = val;
       },
-
       /**
        * 根据 userId 批量删除用户
        */
       handleDeleteList() {
         let tuIds = "";
         this.multipleSelection.forEach(item => {
-          tuIds += item.tuId + ',';
+          tuIds += item.twId + ',';
 
         })
         console.log(tuIds);
@@ -477,7 +487,7 @@
           console.log(postData);
           this.axios({
             method: 'post',
-            url: '/warehouse/deleteUserByIdList',
+            url: '/warehouse/deleteTwByIdList',
             data: postData
           }).then(response => {
             this.getRowCount();
@@ -506,6 +516,7 @@
       },
 
 
+
       updateUser() {
         if (this.ruleForm.tid == null || this.ruleForm.pname == null || this.ruleForm.pcount == null || this.ruleForm.pid == null ) {
           this.$alert('用户信息不完整请检查', '温馨提示', {
@@ -514,6 +525,7 @@
           return;
         }
         let postData = this.qs.stringify({
+          twId: this.ruleForm.twId,
           tid: this.ruleForm.tid,
           pid: this.ruleForm.pid,
           pname: this.ruleForm.pname,
@@ -522,7 +534,7 @@
         });
         this.axios({
           method: 'post',
-          url: '/warehouse/updateUserById',
+          url: '/warehouse/updateTwById',
           data: postData
         }).then(response => {
           this.handlePageChange();

@@ -283,6 +283,7 @@
                   userEmail: this.ruleForm.userEmail,//用户性别
                   userTel: this.ruleForm.userTel,//用户年龄
                 });
+              console.log(postData);
                 this.axios({
                     method: 'post',
                     url: '/usermanage/createUser',
