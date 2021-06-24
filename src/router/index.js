@@ -13,6 +13,7 @@ import UserManage from "../components/UserManage";
 import Warehouse from "../components/Warehouse";
 import ProductManage from "../components/ProductManage";
 import adminHome from "../views/AdminHome";
+import TypeManage from "../components/TypeManage";
 // 安装路由
 Vue.use(Router);
 
@@ -24,6 +25,11 @@ export default new Router({
       path:'/home',
       name:'Home',
       component:Home
+    },
+    {
+      path:'/typeManage',
+      name:'TypeManage',
+      component:TypeManage
     },
     {
       path:'/adminHome',

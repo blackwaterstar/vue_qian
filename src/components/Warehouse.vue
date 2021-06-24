@@ -409,7 +409,7 @@
         this.dialogUpdate = false;
         this.ruleForm = {
           tid: null,
-          pname: null,
+          tname: null,
           pcount: null,
           pid: null,
           pshelf: null,
