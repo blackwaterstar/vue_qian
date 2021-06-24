@@ -11,7 +11,8 @@ import Pay from '../components/Pay'
 import Register from "../components/Register";
 import UserManage from "../components/UserManage";
 import Warehouse from "../components/Warehouse";
-
+import ProductManage from "../components/ProductManage";
+import adminHome from "../views/AdminHome";
 // 安装路由
 Vue.use(Router);
 
@@ -23,6 +24,16 @@ export default new Router({
       path:'/home',
       name:'Home',
       component:Home
+    },
+    {
+      path:'/adminHome',
+      name:'adminHome',
+      component:adminHome,
+    },
+    {
+      path:'/productManage',
+      name:'ProductManage',
+      component:ProductManage
     },
     {
       path:'/warehouse',

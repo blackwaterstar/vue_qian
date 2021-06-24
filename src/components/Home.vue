@@ -31,20 +31,9 @@
           <br/>
           <h4>{{pro.pname}}</h4>
           <h4>{{pro.price}}</h4>
-
           <el-button type="primary" round @click="gtproinfo(pro.pid,pro.pimg)">立即购买</el-button>
-
         </div>
-
       </div>
-
-
-
-
-
-
-
-
     </el-main>
     <el-footer height="260px">Footer</el-footer>
   </el-container>
@@ -107,21 +96,14 @@ export default {
 <style scoped>
 
   .product{
-
     margin-top: 30px;
     display: inline-block;
     width: 30%;
-
-
   }
 
   .product img{
-
-
     width: 200px;
     height: 250px;
-
-
   }
 
 
