@@ -114,16 +114,18 @@ export default {
           orderUser:this.orderUser,
           orderTel:this.orderTel,
           orderAddr:this.orderAddr,
-          pids:[]
+          pids:[],
+          pcounts:[]
         }
         //获取选中的每一行的商品的id
       var i=0;
       this.multipleSelection.forEach(row => {
 
         orderData.pids[i] =  row.pid;
+        orderData.pcounts[i] =  row.pcount;
         i++;
       })
-      // console.log(orderData);
+      console.log(orderData);
       //发送请求
       var vm = this;
       this.axios({
