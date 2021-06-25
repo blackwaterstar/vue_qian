@@ -5,13 +5,18 @@
         <img src="../assets/logo.png" width="150px" height="50px">
       </div></el-col>
       <el-col v-if="!islogin" :span="12"><div class="grid-content bg-purple-light" align="right">
+        <el-button  @click="backhome">返回主页</el-button>
+        &nbsp;  &nbsp;  &nbsp;  &nbsp;  &nbsp;  &nbsp;
         <el-button plain @click="$router.push('/Login')">登录</el-button>
         <el-button plain>注册</el-button>
       </div></el-col>
       <el-col v-if="islogin" :span="12"><div class="grid-content bg-purple-light" align="right">
+        <el-button  @click="backhome">返回主页</el-button>
+        &nbsp;  &nbsp;  &nbsp;  &nbsp;  &nbsp;  &nbsp;
         <span>欢迎你，{{username}}</span>
         <el-button plain @click="$router.push('/logout')">注销</el-button>
       </div></el-col>
+
     </el-header>
     <el-main>
 
@@ -88,7 +93,7 @@ export default {
     return {
       tableData: [
       ],
-      userId: this.$route.params.userId,
+      userId: this.$store.getters.getUser.userId,
       pid: this.$route.params.pid,
       pcount: this.$route.params.pcount,
       multipleSelection: [],
@@ -106,6 +111,11 @@ export default {
 
   },
   methods: {
+
+    backhome(){
+      this.$router.push("/home");
+    },
+
 
     createOrder(){
         var orderData = {
@@ -156,6 +166,8 @@ export default {
       })
 
     },
+
+
     handleSelectionChange(val){
       //当多选框变化是调用的函数
       this.totalMoney = 0;
@@ -164,22 +176,15 @@ export default {
       this.multipleSelection.forEach(row => {
         //获取选中的每一行的数据
         // console.log(row);
-
          this.totalMoney += row.price*row.pcount;
-
-
       })
     },
 
     getTableDate(){
-
       var vm = this;
-
       this.axios({
-
         method:'GET',
-        url: '/cart/addCart?userId='+vm.userId+'&pid='+vm.pid+'&pcount='+vm.pcount
-
+        url: '/cart/addCart?userId='+vm.userId
       }).then(function(resp){
         vm.tableData = resp.data
       })

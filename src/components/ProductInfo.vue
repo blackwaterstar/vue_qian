@@ -18,13 +18,18 @@
         <img src="../assets/logo.png" width="150px" height="50px">
       </div></el-col>
       <el-col v-if="!islogin" :span="12"><div class="grid-content bg-purple-light" align="right">
+        <el-button  @click="backhome">返回主页</el-button>
+        &nbsp;  &nbsp;  &nbsp;  &nbsp;  &nbsp;  &nbsp;
         <el-button plain @click="$router.push('/Login')">登录</el-button>
         <el-button plain>注册</el-button>
       </div></el-col>
       <el-col v-if="islogin" :span="12"><div class="grid-content bg-purple-light" align="right">
+        <el-button  @click="backhome">返回主页</el-button>
+        &nbsp;  &nbsp;  &nbsp;  &nbsp;  &nbsp;  &nbsp;
         <span>欢迎你，{{username}}</span>
         <el-button plain @click="$router.push('/logout')">注销</el-button>
       </div></el-col>
+
     </el-header>
     <el-main>
 
@@ -131,6 +136,12 @@ export default {
     this.getProduct();
   },
   methods: {
+
+    backhome(){
+      this.$router.push("/home");
+    },
+
+
     getProduct() {
       var vm = this;
       let postData1 = vm.qs.stringify({
@@ -145,14 +156,53 @@ export default {
       })
     },
 
-    gtCart: function () {
-      var p = {
-        userId: this.$store.getters.getUser.userId,
-        pid: this.pro.pid,
-        pcount: this.count
-      };
-      this.$router.push({name: 'Cart', params: p});
+
+    gtCart() {
+      this.$confirm('加入购物车, 是否继续?', '提示', {
+        confirmButtonText: '确定',
+        cancelButtonText: '取消',
+        type: 'warning'
+      }).then(() => {
+        let postData = this.qs.stringify({
+          userId: this.$store.getters.getUser.userId,
+          pid: this.pro.pid,
+          pcount: this.count
+        });
+        console.log(postData);
+        this.axios({
+          method: 'post',
+          url: '/cart/addCart1',
+          data: postData
+        }).then(response => {
+          this.$message({
+            type: 'success',
+            message: '添加成功!'
+          });
+          this.$router.push("/cart")
+          //console.log(response);
+        }).catch(error => {
+          console.log(error);
+        });
+
+      }).catch(() => {
+        this.$message({
+          type: 'info',
+          message: '已取消添加'
+        });
+      });
     }
+    //
+    // gtCart: function () {
+    //   var p = {
+    //     userId: this.$store.getters.getUser.userId,
+    //     pid: this.pro.pid,
+    //     pcount: this.count
+    //   };
+    //   this.$router.push({name: 'Cart', params: p});
+    //
+    //
+    //
+    // }
   }
 }
 </script>
