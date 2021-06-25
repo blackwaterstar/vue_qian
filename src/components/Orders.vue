@@ -53,8 +53,10 @@ export default {
           url: '/order/list?userId='+vm.user.userId
         }).then(function(resp){
           vm.orders = resp.data;
+          console.log(vm.orders);
         })
       },
+
     pay(order){
         var d = {
           orderId:order.orderId,
