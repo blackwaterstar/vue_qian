@@ -15,7 +15,7 @@
       <el-form-item>
         <el-button type="primary" @click="onSubmit('form')">登录</el-button>
         &nbsp;  &nbsp;  &nbsp;  &nbsp;  &nbsp;  &nbsp;
-        <el-button type="primary" @click="back">普通登录</el-button>
+        <el-button type="primary" @click="back">返回登录</el-button>
       </el-form-item>
 
     </el-form>
@@ -56,7 +56,7 @@
             //表单验证成功，要发送登录请求
             this.axios({
               method: 'GET',
-              url: '/user/login?userId='+vm.form.userId+'&userPwd='+vm.form.userPwd
+              url: '/user/adminLogin?userId='+vm.form.userId+'&userPwd='+vm.form.userPwd
             }).then(function(resp){
               if(resp.data.result){
                 var user = resp.data.data;
@@ -73,7 +73,7 @@
                 });
                 setTimeout(function(){
 
-                  vm.$router.push("/home");
+                  vm.$router.push("/adminHome");
 
                 },2000)
               }else{

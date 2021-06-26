@@ -48,7 +48,7 @@ export default new Router({
       component:ProductManage
     },
     {
-      path:'/warehouse',
+      path:'/warehouseManage',
       name:'Warehouse',
       component:Warehouse
     },
@@ -88,7 +88,7 @@ export default new Router({
       component:Pay
     },
     {
-      path:'/usermanage',
+      path:'/userManage',
       name:'UserManage',
       component:UserManage
     }

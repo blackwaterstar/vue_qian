@@ -51,6 +51,12 @@ router.beforeEach((to, form, next) => {
       next({path: '/adminHome'});
     }
   }
+  else if (to.path == '/userManage'||to.path == '/warehouseManage'||to.path == '/productManage'||to.path == '/typeManage') {
+    if (adminLogin == null) {
+      // 跳转到首页
+      next({path: '/adminLogin'});
+    }
+  }
   // 如果为非登录状态
   else if (isLogin == null && adminLogin == null) {
     if(to.path!='/register'){
