@@ -14,9 +14,10 @@
 
         <el-form-item>
           <el-button type="primary" @click="onSubmit('form')">登录</el-button>
-          &nbsp;  &nbsp;  &nbsp;  &nbsp;  &nbsp;  &nbsp;
+          &nbsp;  &nbsp;
           <el-button type="primary" @click="Register()">注册</el-button>
-<!--          <router-link to="/register">注册</router-link>-->
+          <el-button type="primary" @click="adminlogin">管理员登陆</el-button>
+
         </el-form-item>
 
       </el-form>
@@ -48,6 +49,11 @@
           }
         },
         methods:{
+          adminlogin(){
+            this.$router.push("/adminLogin")
+          },
+
+
           Register()
           {
 
@@ -62,23 +68,14 @@
                   method: 'GET',
                   url: '/user/login?userId='+vm.form.userId+'&userPwd='+vm.form.userPwd
                 }).then(function(resp){
-
-
-
                   if(resp.data.result){
-
-
                     var user = resp.data.data;
                     sessionStorage.setItem("isLogin","true")
                     //往vuex里存放一个user对象
                     //先要有user对象
                     //再存到vuex里
                     vm.$store.dispatch('asyncUpdateUser', user);
-
-
-
                     //再在home.vue里获取vuex对象里的user对象的内容。
-
                     vm.$message({
                       message: resp.data.message,
                       type: 'success'

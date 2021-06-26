@@ -30,11 +30,11 @@ Vue.use(ElementUI);
 router.beforeEach((to, form, next) => {
   // 获取用户登录状态
   let isLogin = sessionStorage.getItem('isLogin');
+  let adminLogin = sessionStorage.getItem('adminLogin');
   // 注销
   if (to.path == '/logout') {
     // 清空
     sessionStorage.clear();
-
     // 跳转到登录
     next({path: '/Login'});
   }
@@ -45,8 +45,14 @@ router.beforeEach((to, form, next) => {
       next({path: '/home'});
     }
   }
+  else if (to.path == '/adminLogin') {
+    if (adminLogin != null) {
+      // 跳转到首页
+      next({path: '/adminHome'});
+    }
+  }
   // 如果为非登录状态
-  else if (isLogin == null) {
+  else if (isLogin == null && adminLogin == null) {
     if(to.path!='/register'){
       // 跳转到登录页
       next({path: '/login'});

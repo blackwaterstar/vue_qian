@@ -14,6 +14,7 @@ import Warehouse from "../components/Warehouse";
 import ProductManage from "../components/ProductManage";
 import adminHome from "../views/AdminHome";
 import TypeManage from "../components/TypeManage";
+import AdminLogin from "../components/AdminLogin";
 // 安装路由
 Vue.use(Router);
 
@@ -25,6 +26,11 @@ export default new Router({
       path:'/home',
       name:'Home',
       component:Home
+    },
+    {
+      path:'/adminLogin',
+      name:'AdminLogin',
+      component:AdminLogin
     },
     {
       path:'/typeManage',
