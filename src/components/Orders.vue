@@ -1,4 +1,28 @@
 <template>
+  <el-container>
+  <el-header>
+      <el-col :span="12"><div class="grid-content bg-purple" align="left">
+        <img src="../assets/logo.png" width="150px" height="50px">
+      </div></el-col>
+      <el-col v-if="!islogin" :span="12"><div class="grid-content bg-purple-light" align="right">
+        <el-button  @click="backhome">返回主页</el-button>
+        &nbsp;  &nbsp;  &nbsp;  &nbsp;  &nbsp;  &nbsp;
+        <el-button plain @click="$router.push('/Login')">登录</el-button>
+        <el-button plain>注册</el-button>
+      </div></el-col>
+      <el-col v-if="islogin" :span="12">
+        <div class="grid-content bg-purple-light" align="right">
+        <el-button  @click="backhome">返回主页</el-button>
+        &nbsp;  &nbsp;  &nbsp;  &nbsp;  &nbsp;  &nbsp;
+        <span>欢迎你，{{username}}</span>
+        <el-button plain @click="$router.push('/logout')">注销</el-button>
+      </div>
+        <div class="grid-content bg-purple-light" align="left">
+          <el-button  @click="yorders">查看已支付订单</el-button>
+        </div>
+      </el-col>
+  </el-header>
+    <el-main>
     <div>
       <div v-for="order in orders">
         <span>订单创建时间：{{order.createdTime}}</span>  <span>订单编号：{{order.orderId}}</span>
@@ -28,9 +52,10 @@
 
         <h3>订单金额：{{order.orderPrice}}</h3>
         <el-button class="el-button--danger" @click="pay(order)">支付</el-button>
-
       </div>
     </div>
+    </el-main>
+  </el-container>
 </template>
 
 <script>
@@ -39,13 +64,21 @@ export default {
   data(){
       return {
         user:this.$store.getters.getUser,
-        orders:[]
+        orders:[],
+        username:this.$store.getters.getUser.userNickname,
+        islogin: this.$store.getters.getUser==null?false:true,
       }
   },
   created() {
       this.getData();
   },
   methods:{
+    backhome(){
+      this.$router.push("/home");
+    },
+    yorders(){
+      this.$router.push("/yorders");
+    },
       getData(){
         var vm = this;
         this.axios({
@@ -54,6 +87,7 @@ export default {
         }).then(function(resp){
           vm.orders = resp.data;
           console.log(vm.orders);
+
         })
       },
 

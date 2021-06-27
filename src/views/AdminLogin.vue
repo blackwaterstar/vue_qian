@@ -35,7 +35,7 @@
         rules:{
           userId: [
             { required: true, message: '请输入账号', trigger: 'blur' },
-            { min: 5, max: 5, message: '长度必须是6个数字', trigger: 'blur' }
+            { min: 5, max: 6, message: '长度必须是5个数字', trigger: 'blur' }
           ],
           userPwd: [
             { required: true, message: '请输入密码', trigger: 'blur' },
@@ -84,7 +84,7 @@
 
           } else {
             this.$message({
-              message: '电话号码或密码不能为空！',
+              message: '账号或密码不能为空！',
               type: 'warning'
             });
             return false;

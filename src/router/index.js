@@ -9,12 +9,13 @@ import Login from '../components/Login'
 import Orders from '../components/Orders'
 import Pay from '../components/Pay'
 import Register from "../components/Register";
-import UserManage from "../components/UserManage";
-import Warehouse from "../components/Warehouse";
-import ProductManage from "../components/ProductManage";
+import UserManage from "../views/UserManage";
+import Warehouse from "../views/Warehouse";
+import ProductManage from "../views/ProductManage";
 import adminHome from "../views/AdminHome";
-import TypeManage from "../components/TypeManage";
-import AdminLogin from "../components/AdminLogin";
+import TypeManage from "../views/TypeManage";
+import AdminLogin from "../views/AdminLogin";
+import Yorders from "../components/Yorders";
 // 安装路由
 Vue.use(Router);
 
@@ -25,32 +26,65 @@ export default new Router({
     {
       path:'/home',
       name:'Home',
-      component:Home
+      component:Home,
+      meta: {
+        keepAlive: false
+      }
+
+    },
+    {
+      path:'/yorders',
+      name:'Yorders',
+      component:Yorders,
+      meta: {
+        keepAlive: false
+      }
+
     },
     {
       path:'/adminLogin',
       name:'AdminLogin',
-      component:AdminLogin
+      component:AdminLogin,
+      meta: {
+        keepAlive: true
+      }
+
     },
     {
       path:'/typeManage',
       name:'TypeManage',
-      component:TypeManage
+      component:TypeManage,
+      meta: {
+        keepAlive: true
+      }
+
     },
     {
       path:'/adminHome',
       name:'adminHome',
       component:adminHome,
+      meta: {
+        keepAlive: true
+      }
+
     },
     {
       path:'/productManage',
       name:'ProductManage',
-      component:ProductManage
+      component:ProductManage,
+      meta: {
+        keepAlive: true
+      }
+
     },
     {
       path:'/warehouseManage',
       name:'Warehouse',
-      component:Warehouse
+      component:Warehouse,
+      meta: {
+        keepAlive: true
+      }
+
     },
     // {
     //   path:'/productinfo/:pid',
@@ -60,37 +94,65 @@ export default new Router({
     {
       path:'/productinfo',
       name:'ProductInfo',
-      component:ProductInfo
+      component:ProductInfo,
+      meta: {
+        keepAlive: false
+      }
+
     },
     {
       path:'/cart',
       name:'Cart',
-      component:Cart
+      component:Cart,
+      meta: {
+        keepAlive: false
+      }
+
     },
     {
       path:'/login',
       name:'Login',
-      component:Login
+      component:Login,
+      meta: {
+        keepAlive: false
+      }
+
     },
     {
       path:'/orders',
       name:'Orders',
-      component:Orders
+      component:Orders,
+      meta: {
+        keepAlive: false
+      }
+
     },
     {
       path:'/register',
       name:'Register',
-      component:Register
+      component:Register,
+      meta: {
+        keepAlive: false
+      }
+
     },
     {
       path:'/pay',
       name:'Pay',
-      component:Pay
+      component:Pay,
+      meta: {
+        keepAlive: false
+      }
+
     },
     {
       path:'/userManage',
       name:'UserManage',
-      component:UserManage
+      component:UserManage,
+      meta: {
+        keepAlive: true
+      }
+
     }
   ]
 });

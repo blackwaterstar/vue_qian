@@ -80,53 +80,6 @@
       </el-main>
     </el-container>
   </el-container>
-<!--  <el-container>-->
-<!--&lt;!&ndash;    <el-header height="60px">&ndash;&gt;-->
-<!--&lt;!&ndash;      <div>&ndash;&gt;-->
-<!--&lt;!&ndash;      <el-menu :default-active="activeIndex" class="el-menu-demo" mode="horizontal" @select="handleSelect">&ndash;&gt;-->
-<!--&lt;!&ndash;        <el-menu-item index="1">处理中心</el-menu-item>&ndash;&gt;-->
-<!--&lt;!&ndash;        <el-submenu index="2">&ndash;&gt;-->
-<!--&lt;!&ndash;          <template slot="title">我的工作台</template>&ndash;&gt;-->
-<!--&lt;!&ndash;          <el-menu-item index="2-1">选项1</el-menu-item>&ndash;&gt;-->
-<!--&lt;!&ndash;          <el-menu-item index="2-2">选项2</el-menu-item>&ndash;&gt;-->
-<!--&lt;!&ndash;          <el-menu-item index="2-3">选项3</el-menu-item>&ndash;&gt;-->
-<!--&lt;!&ndash;          <el-submenu index="2-4">&ndash;&gt;-->
-<!--&lt;!&ndash;            <template slot="title">选项4</template>&ndash;&gt;-->
-<!--&lt;!&ndash;            <el-menu-item index="2-4-1">选项1</el-menu-item>&ndash;&gt;-->
-<!--&lt;!&ndash;            <el-menu-item index="2-4-2">选项2</el-menu-item>&ndash;&gt;-->
-<!--&lt;!&ndash;            <el-menu-item index="2-4-3">选项3</el-menu-item>&ndash;&gt;-->
-<!--&lt;!&ndash;          </el-submenu>&ndash;&gt;-->
-<!--&lt;!&ndash;        </el-submenu>&ndash;&gt;-->
-<!--&lt;!&ndash;        <el-menu-item index="3" disabled>消息中心</el-menu-item>&ndash;&gt;-->
-<!--&lt;!&ndash;        <el-menu-item index="4"><a href="http://localhost:8091/cart" target="_blank">订单管理</a></el-menu-item>&ndash;&gt;-->
-<!--&lt;!&ndash;      </el-menu>&ndash;&gt;-->
-<!--&lt;!&ndash;      </div>&ndash;&gt;-->
-
-<!--&lt;!&ndash;    </el-header>&ndash;&gt;-->
-<!--    <el-main>-->
-
-<!--      <div class="block" >-->
-
-<!--        <el-carousel indicator-position="none" height="350px">-->
-<!--          <el-carousel-item v-for="item in imgs"  v-bind:key="item">-->
-<!--            <img :src="item">-->
-<!--          </el-carousel-item>-->
-<!--        </el-carousel>-->
-<!--      </div>-->
-
-
-<!--      <div class="products">-->
-<!--        <div v-for="pro in pros" class="product">-->
-<!--          <img :src="pro.pimg" />-->
-<!--          <br/>-->
-<!--          <h4>{{pro.pname}}</h4>-->
-<!--          <h4>{{pro.price}}</h4>-->
-<!--          <el-button type="primary" round @click="gtproinfo(pro.pid,pro.pimg)">立即购买</el-button>-->
-<!--        </div>-->
-<!--      </div>-->
-<!--    </el-main>-->
-<!--    <el-footer height="260px">Footer</el-footer>-->
-<!--  </el-container>-->
 
 </template>
 
