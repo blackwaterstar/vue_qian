@@ -38,7 +38,7 @@
                 <el-menu-item index="1-3">修改信息</el-menu-item>
               </el-menu-item-group>
               <el-menu-item-group title="钱包">
-                <el-menu-item index="1-4">我的钱包</el-menu-item>
+                <el-menu-item index="1-4"> <router-link to="/wallet">我的钱包</router-link></el-menu-item>
               </el-menu-item-group>
 
             </el-submenu>
@@ -58,6 +58,8 @@
         </el-col>
       </el-aside>
       <el-main>
+
+
         <div class="block" >
 
           <el-carousel indicator-position="none" height="350px">
@@ -66,7 +68,21 @@
             </el-carousel-item>
           </el-carousel>
         </div>
-
+<el-form :inline="true" :model="formInline" class="demo-form-inline"><el-form-item> <el-input
+  v-model="search1"
+  size="max"
+  placeholder="输入商品名查询" v-on:input="handleSearch()">
+</el-input></el-form-item>
+<el-form-item>
+  <el-select size="big" v-model="search2" clearable placeholder="按类别查找书籍" filterable v-on:input="handleSearch()">
+    <el-option
+      v-for="type in types"
+      :key="type.tid"
+      :label="type.tname"
+      :value="type.tid">
+    </el-option>
+  </el-select>
+</el-form-item></el-form>
 
         <div class="products">
           <div v-for="pro in pros" class="product">
@@ -99,6 +115,9 @@ export default {
         "/static/b4.jpg"
       ],
       pros:null,
+      types:null,
+      search1:null,
+      search2:null,
       username:this.$store.getters.getUser.userNickname,
       islogin: this.$store.getters.getUser==null?false:true
 
@@ -106,6 +125,7 @@ export default {
   },
   created(){
     this.getList();
+    this.getDep();
   },
   methods:{
     handleOpen(key, keyPath) {
@@ -114,6 +134,45 @@ export default {
     handleClose(key, keyPath) {
       console.log(key, keyPath);
     },
+    getDep:function(){
+      var vm = this;
+      this.axios({
+        method:'post',
+        url: '/type/getAllTid'
+      }).then(function(resp){
+        vm.types = resp.data;
+        console.log(resp.data);
+
+      })
+    },
+
+    // handleSearch() {
+    //   this.axios({
+    //     method: 'get',
+    //     url: '/product/list1?tid='+this.search2,
+    //   }).then(response => {
+    //     this.pros = response.data;
+    //   }).catch(error => {
+    //     console.log(error);
+    //   });
+    // },
+    handleSearch() {
+      let postData = this.qs.stringify({
+        pname: this.search1,
+        tid: this.search2
+      });
+      console.log(postData);
+      this.axios({
+        method: 'post',
+        url: '/product/list1',
+        data: postData
+      }).then(response => {
+        this.pros = response.data;
+      }).catch(error => {
+        console.log(error);
+      });
+    },
+
     getList:function(){
       var vm = this;
       this.axios({

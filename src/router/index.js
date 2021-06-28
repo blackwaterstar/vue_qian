@@ -16,6 +16,7 @@ import adminHome from "../views/AdminHome";
 import TypeManage from "../views/TypeManage";
 import AdminLogin from "../views/AdminLogin";
 import Yorders from "../components/Yorders";
+import Wallet from "../components/Wallet";
 // 安装路由
 Vue.use(Router);
 
@@ -27,6 +28,15 @@ export default new Router({
       path:'/home',
       name:'Home',
       component:Home,
+      meta: {
+        keepAlive: false
+      }
+
+    },
+    {
+      path:'/wallet',
+      name:'Wallet',
+      component:Wallet,
       meta: {
         keepAlive: false
       }
@@ -45,6 +55,15 @@ export default new Router({
       path:'/adminLogin',
       name:'AdminLogin',
       component:AdminLogin,
+      meta: {
+        keepAlive: true
+      }
+
+    },
+    {
+      path:'/userManage',
+      name:'UserManage',
+      component:UserManage,
       meta: {
         keepAlive: true
       }
@@ -86,11 +105,6 @@ export default new Router({
       }
 
     },
-    // {
-    //   path:'/productinfo/:pid',
-    //   name:'ProductInfo',
-    //   component:ProductInfo
-    // },
     {
       path:'/productinfo',
       name:'ProductInfo',
@@ -144,15 +158,7 @@ export default new Router({
         keepAlive: false
       }
 
-    },
-    {
-      path:'/userManage',
-      name:'UserManage',
-      component:UserManage,
-      meta: {
-        keepAlive: true
-      }
-
     }
+
   ]
 });

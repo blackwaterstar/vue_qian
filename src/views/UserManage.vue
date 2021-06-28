@@ -5,14 +5,14 @@
                 <el-input
                         v-model="search1"
                         size="mini"
-                        placeholder="输入姓名查询" v-on:input="handleSearch()">
+                        placeholder="输入用户id查询" v-on:input="handleSearch()">
                 </el-input>
             </el-form-item>
             <el-form-item>
               <el-input
                 v-model="search2"
                 size="mini"
-                placeholder="输入手机号码查询" v-on:input="handleSearch()">
+                placeholder="输入用户名查询" v-on:input="handleSearch()">
               </el-input>
             </el-form-item>
             <el-form-item>
@@ -332,7 +332,7 @@
                     data: postData
                 }).then(response => {
                     this.total = response.data;
-                    let countPage = Math.ceil(this.total/5);
+                    let countPage = Math.ceil(this.total/10);
                     if (countPage <= this.currentPage) {
                         this.currentPage = countPage;
                     }

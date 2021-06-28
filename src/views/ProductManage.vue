@@ -115,7 +115,7 @@
         :visible.sync="dialogAdd"
         :before-close="handleClose">
         <el-form-item label="商品">
-          <el-select size="big" v-model="ruleForm.pid" clearable placeholder="请选择商品" filterable>
+          <el-select size="big" v-model="ruleForm.pid" clearable placeholder="请选择商品" filterable  @change="selectpname">
             <el-option
               v-for="type in warehouses"
               :key="type.pid"
@@ -124,16 +124,28 @@
             </el-option>
           </el-select>
         </el-form-item>
-        <el-form-item label="商品价格">
-          <el-input v-model="ruleForm.price" placeholder="请输入商品id"></el-input>
+
+        <el-form-item label="商品名称">
+          <el-input v-model="ruleForm.pname" disabled></el-input>
         </el-form-item>
-<!--        <el-form-item label="商品名称">-->
-<!--          <el-input v-model="ruleForm.pname"></el-input>-->
-<!--        </el-form-item>-->
+        <el-form-item label="商品价格">
+          <el-input v-model="ruleForm.price" placeholder="请输入商品价格" ></el-input>
+        </el-form-item>
+        <el-form-item label="类别id">
+          <el-input v-model="ruleForm.tid" placeholder="类别id" disabled></el-input>
+        </el-form-item>
+
+
         <el-form-item label="商品图片">
-<!--          <el-input v-model="ruleForm.pimg"></el-input>-->
+          <el-button type="primary" v-on:click="openFile()" round>选择文件</el-button>
+          <!--          <el-button type="primary" v-on:click="showRealPath()" round>显示路径</el-button>-->
+          <input type="file" name="filename" id="open"  style="display:none"/>
+          <el-input v-model="ruleForm.pimg" disabled style="display:none"></el-input>
 <!--          <el-upload-->
-<!--            action="https://jsonplaceholder.typicode.com/posts/"-->
+<!--            ref="ruleForm"-->
+<!--            action=""-->
+<!--            :auto-upload="false"-->
+<!--             :http-request="upLoadFile"-->
 <!--            list-type="picture-card"-->
 <!--            :limit="1"-->
 <!--            :on-preview="handlePictureCardPreview"-->
@@ -144,11 +156,9 @@
 <!--            <img width="100%" :src="dialogImageUrl" alt="">-->
 <!--          </el-dialog>-->
 
-          <el-button type="primary" v-on:click="openFile()" round>选择文件</el-button>
-          <el-button type="primary" v-on:click="showRealPath()" round>显示路径</el-button>
-          <input type="file" name="filename" id="open"  style="display:none"/>
-          <el-input v-model="ruleForm.pimg" label="showRealPath()" id="input01"></el-input>
+
         </el-form-item>
+
         <span slot="footer" class="dialog-footer">
             <el-button @click="emptyUserData()" size="medium">取 消</el-button>
             <el-button @click="addUser('ruleForm')" type="primary" size="medium">上架</el-button>
@@ -172,8 +182,30 @@
 <!--            </el-option>-->
 <!--          </el-select>-->
 <!--        </el-form-item>-->
+<!--        <el-form-item label="商品图片">-->
+<!--          <el-input v-model="ruleForm.pimg" placeholder="请输入商品id"></el-input>-->
+<!--        </el-form-item>-->
         <el-form-item label="商品图片">
-          <el-input v-model="ruleForm.pimg" placeholder="请输入商品id"></el-input>
+          <el-button type="primary" v-on:click="openFile1()" round>更换图片</el-button>
+          <!--          <el-button type="primary" v-on:click="showRealPath()" round>显示路径</el-button>-->
+          <input type="file" name="filename" id="open1"  style="display:none"/>
+          <el-input v-model="ruleForm.pimg" disabled style="display:none"></el-input>
+          <!--          <el-upload-->
+          <!--            ref="ruleForm"-->
+          <!--            action=""-->
+          <!--            :auto-upload="false"-->
+          <!--             :http-request="upLoadFile"-->
+          <!--            list-type="picture-card"-->
+          <!--            :limit="1"-->
+          <!--            :on-preview="handlePictureCardPreview"-->
+          <!--            :on-remove="handleRemove">-->
+          <!--            <i class="el-icon-plus"></i>-->
+          <!--          </el-upload>-->
+          <!--          <el-dialog :visible.sync="dialogVisible">-->
+          <!--            <img width="100%" :src="dialogImageUrl" alt="">-->
+          <!--          </el-dialog>-->
+
+
         </el-form-item>
         <el-form-item label="商品价格">
           <el-input v-model="ruleForm.price"></el-input>
@@ -275,19 +307,33 @@
     methods: {
       openFile: function () {
         document.getElementById('open').click()
+        this.showRealPath()
+      },
+      openFile1: function () {
+        document.getElementById('open1').click()
+        this.showRealPath()
       },
       showRealPath: function () {
-        document.getElementById('input01').value = document.getElementById('open').value
+        // document.getElementById('input01').value = document.getElementById('open').value
+        this.ruleForm.pimg = document.getElementById('open').value
       },
 
-      handleRemove(file, fileList) {
-        console.log(file, fileList);
-      },
-      handlePictureCardPreview(file) {
-        this.dialogImageUrl = file.url;
-        this.dialogVisible = true;
-        console.log(file.url);
-      },
+       selectpname(){
+        console.log('warehouse',this.warehouses)
+       const item = this.warehouses.find(item1=> item1.pid === this.ruleForm.pid)
+       console.log(item)
+         this.ruleForm.pname = item.pname,
+         this.ruleForm.tid = item.tid
+     },
+
+      // handleRemove(file, fileList) {
+      //   console.log(file, fileList);
+      // },
+      // handlePictureCardPreview(file) {
+      //   this.dialogImageUrl = file.url;
+      //   this.dialogVisible = true;
+      //   console.log(file.url);
+      // },
 
       getwarehouses:function(){
         var vm = this;
@@ -342,7 +388,7 @@
        * 添加
        */
       addUser() {
-        if (this.ruleForm.pimg == null ||this.ruleForm.price == null||this.ruleForm.pid == null) {
+        if (this.ruleForm.pimg == null ||this.ruleForm.price == null) {
           this.$alert('用户信息不完整请检查', '温馨提示', {
             confirmButtonText: '确定'
           });
@@ -352,9 +398,10 @@
           tpId:this.ruleForm.tpId,
           tid: this.ruleForm.tid,
           pname: this.ruleForm.pname,
-          pimg: this.ruleForm.pimg,
+          pimg:  document.getElementById('open').value,
           pid: this.ruleForm.pid,
-          price: this.ruleForm.price
+          price: this.ruleForm.price,
+          file: this.ruleForm.file
 
         });
         console.log(postData);
@@ -561,7 +608,7 @@
           tpId:this.ruleForm.tpId,
           tid: this.ruleForm.tid,
           pname: this.ruleForm.pname,
-          pimg: this.ruleForm.pimg,
+          pimg: document.getElementById('open1').value,
           pid: this.ruleForm.pid,
           price: this.ruleForm.price
         });

@@ -165,7 +165,7 @@
         :visible.sync="dialogUpdate"
         :before-close="handleClose">
         <el-form-item label="商品类别">
-          <el-select size="big" v-model="ruleForm.tid" clearable placeholder="请选择" filterable>
+          <el-select size="big" v-model="ruleForm.tid" clearable placeholder="请选择" filterable  @change="selecttname">
             <el-option
               v-for="type in types"
               :key="type.tid"
@@ -174,8 +174,11 @@
             </el-option>
           </el-select>
         </el-form-item>
+        <el-form-item label="类别">
+          <el-input v-model="ruleForm.tname"  disabled></el-input>
+        </el-form-item>
         <el-form-item label="商品id">
-          <el-input v-model="ruleForm.pid" placeholder="请输入商品id"></el-input>
+          <el-input v-model="ruleForm.pid" placeholder="请输入商品id" disabled></el-input>
         </el-form-item>
         <el-form-item label="商品名称">
           <el-input v-model="ruleForm.pname"></el-input>
@@ -271,6 +274,12 @@
 
 
     methods: {
+      selecttname(){
+        console.log('type',this.types)
+        const item = this.types.find(item1=> item1.tid === this.ruleForm.tid)
+        console.log(item)
+        this.ruleForm.tname = item.tname
+      },
 
       getDep:function(){
         var vm = this;
