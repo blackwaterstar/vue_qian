@@ -36,7 +36,7 @@
 
     <el-table
       ref="multipleTable"
-      :data="tableData"
+      :data="tableData.slice((currentPage-1)*PageSize,currentPage*PageSize)"
       border
       highlight-current-row
       style="width: 100%"
@@ -141,21 +141,6 @@
           <!--          <el-button type="primary" v-on:click="showRealPath()" round>显示路径</el-button>-->
           <input type="file" name="filename" id="open"  style="display:none"/>
           <el-input v-model="ruleForm.pimg" disabled style="display:none"></el-input>
-<!--          <el-upload-->
-<!--            ref="ruleForm"-->
-<!--            action=""-->
-<!--            :auto-upload="false"-->
-<!--             :http-request="upLoadFile"-->
-<!--            list-type="picture-card"-->
-<!--            :limit="1"-->
-<!--            :on-preview="handlePictureCardPreview"-->
-<!--            :on-remove="handleRemove">-->
-<!--            <i class="el-icon-plus"></i>-->
-<!--          </el-upload>-->
-<!--          <el-dialog :visible.sync="dialogVisible">-->
-<!--            <img width="100%" :src="dialogImageUrl" alt="">-->
-<!--          </el-dialog>-->
-
 
         </el-form-item>
 
@@ -172,19 +157,6 @@
         :append-to-body='true'
         :visible.sync="dialogUpdate"
         :before-close="handleClose">
-<!--        <el-form-item label="商品类别">-->
-<!--          <el-select size="big" v-model="ruleForm.tid" clearable placeholder="请选择" filterable>-->
-<!--            <el-option-->
-<!--              v-for="type in pros"-->
-<!--              :key="type.pid"-->
-<!--              :label="type.pname"-->
-<!--              :value="type.pid">-->
-<!--            </el-option>-->
-<!--          </el-select>-->
-<!--        </el-form-item>-->
-<!--        <el-form-item label="商品图片">-->
-<!--          <el-input v-model="ruleForm.pimg" placeholder="请输入商品id"></el-input>-->
-<!--        </el-form-item>-->
         <el-form-item label="商品图片">
           <el-button type="primary" v-on:click="openFile1()" round>更换图片</el-button>
           <!--          <el-button type="primary" v-on:click="showRealPath()" round>显示路径</el-button>-->
@@ -210,9 +182,6 @@
         <el-form-item label="商品价格">
           <el-input v-model="ruleForm.price"></el-input>
         </el-form-item>
-<!--        <el-form-item label="商品数量">-->
-<!--          <el-input v-model="ruleForm.pcount"></el-input>-->
-<!--        </el-form-item>-->
         <span slot="footer" class="dialog-footer">
             <el-button @click="emptyUserData()" size="medium">取 消</el-button>
             <el-button @click="updateUser()" type="primary" size="medium">确 定</el-button>
@@ -220,15 +189,12 @@
       </el-dialog>
     </el-form>
     <br>
-    <el-pagination
-      background
-      :disabled="disablePage"
-      :current-page.sync="currentPage"
-      small
-      layout="prev, pager, next"
-      :page-size="pageSize"
-      :total="total"
-      @current-change="handlePageChange">
+    <el-pagination @size-change="handleSizeChange"
+                   @current-change="handleCurrentChange"
+                   :current-page="currentPage"
+                   :page-sizes="pageSizes"
+                   :page-size="PageSize" layout="total, sizes, prev, pager, next, jumper"
+                   :total="total">
     </el-pagination>
   </div>
 </template>
@@ -263,20 +229,25 @@
         total: 0,
         disablePage: false,
         multipleSelection: [],
+        // 默认显示第几页
+        currentPage:1,
+        // 个数选择器
+        pageSizes:[5,10,15,20],
+        // 默认每页显示的条数
+        PageSize:5,
 
       };
     },
 
     created() {
       let postData1 = this.qs.stringify({
-        page: this.currentPage,
         pname: this.search1,
         tid: this.search2
       });
       console.log(postData1);
       this.axios({
         method: 'post',
-        url: '/product/selectTwPage',
+        url: '/product/selectTwPage1',
         data: postData1
       }).then(response => {
         this.tableData = response.data;
@@ -305,6 +276,19 @@
 
 
     methods: {
+      // 分页
+      // 每页显示的条数
+      handleSizeChange(val) {
+        // 改变每页显示的条数
+        this.PageSize=val
+        // 在改变每页显示的条数时，要将页码显示到第一页
+        this.currentPage=1
+      },
+      // 显示第几页
+      handleCurrentChange(val) {
+        // 改变默认的页数
+        this.currentPage=val
+      },
       openFile: function () {
         document.getElementById('open').click()
         this.showRealPath()
@@ -318,22 +302,14 @@
         this.ruleForm.pimg = document.getElementById('open').value
       },
 
-       selectpname(){
+      selectpname(){
         console.log('warehouse',this.warehouses)
-       const item = this.warehouses.find(item1=> item1.pid === this.ruleForm.pid)
-       console.log(item)
-         this.ruleForm.pname = item.pname,
-         this.ruleForm.tid = item.tid
-     },
+        const item = this.warehouses.find(item1=> item1.pid === this.ruleForm.pid)
+        console.log(item)
+        this.ruleForm.pname = item.pname,
+          this.ruleForm.tid = item.tid
+      },
 
-      // handleRemove(file, fileList) {
-      //   console.log(file, fileList);
-      // },
-      // handlePictureCardPreview(file) {
-      //   this.dialogImageUrl = file.url;
-      //   this.dialogVisible = true;
-      //   console.log(file.url);
-      // },
 
       getwarehouses:function(){
         var vm = this;
@@ -364,17 +340,13 @@
        * 分页
        */
       handlePageChange() {
-
         let postData = this.qs.stringify({
-          page: this.currentPage,
           pname: this.search1,
           tid: this.search2
         });
-
-        console.log(`当前页: ${this.currentPage}`);
         this.axios({
           method: 'post',
-          url: '/product/selectTwPage',
+          url: '/product/selectTwPage1',
           data: postData
         }).then(response => {
           this.tableData = response.data;
@@ -428,8 +400,8 @@
        */
       getRowCount() {
         let postData = this.qs.stringify({
-          userId: this.search1,
-          userNickname: this.search2
+          pname: this.search1,
+          tid: this.search2
         });
         this.axios({
           method: 'post',
@@ -443,24 +415,8 @@
       },
 
       handleSearch() {
-        let postData = this.qs.stringify({
-          pname: this.search1,
-          tid: this.search2
-        });
-        this.axios({
-          method: 'post',
-          url: '/product/getRowCount',
-          data: postData
-        }).then(response => {
-          this.total = response.data;
-          let countPage = Math.ceil(this.total/10);
-          if (countPage <= this.currentPage) {
-            this.currentPage = countPage;
-          }
-          this.handlePageChange();
-        }).catch(error => {
-          console.log(error);
-        });
+        this.getRowCount();
+        this.handlePageChange();
       },
 
       handleEdit(index, row) {
@@ -516,11 +472,6 @@
             data: postData
           }).then(response => {
             this.getRowCount();
-            if (this.total % 10 == 1 && this.currentPage >= 1) {
-              if (this.total / 10 < this.currentPage) {
-                this.currentPage = this.currentPage - 1;
-              }
-            }
             this.handlePageChange();
 
             this.$message({
@@ -571,11 +522,6 @@
             data: postData
           }).then(response => {
             this.getRowCount();
-            if (this.total % 10 == 1 && this.currentPage >= 1) {
-              if (this.total / 10 < this.currentPage) {
-                this.currentPage = this.currentPage - 1;
-              }
-            }
             this.handlePageChange();
 
             this.$message({

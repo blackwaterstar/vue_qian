@@ -8,13 +8,13 @@
           placeholder="输入商品名查询" v-on:input="handleSearch()">
         </el-input>
       </el-form-item>
-<!--      <el-form-item>-->
-<!--        <el-input-->
-<!--          v-model="search2"-->
-<!--          size="mini"-->
-<!--          placeholder="输入手机号码查询" v-on:input="handleSearch()">-->
-<!--        </el-input>-->
-<!--      </el-form-item>-->
+      <!--      <el-form-item>-->
+      <!--        <el-input-->
+      <!--          v-model="search2"-->
+      <!--          size="mini"-->
+      <!--          placeholder="输入手机号码查询" v-on:input="handleSearch()">-->
+      <!--        </el-input>-->
+      <!--      </el-form-item>-->
       <el-form-item>
         <el-select size="big" v-model="search2" clearable placeholder="请选择" filterable v-on:input="handleSearch()">
           <el-option
@@ -43,7 +43,7 @@
 
     <el-table
       ref="multipleTable"
-      :data="tableData"
+      :data="tableData.slice((currentPage-1)*PageSize,currentPage*PageSize)"
       border
       highlight-current-row
       style="width: 100%"
@@ -123,16 +123,16 @@
         :append-to-body='true'
         :visible.sync="dialogAdd"
         :before-close="handleClose">
-                <el-form-item label="商品类别">
-                  <el-select size="big" v-model="ruleForm.tid" clearable placeholder="请选择" filterable>
-                    <el-option
-                      v-for="type in types"
-                      :key="type.tid"
-                      :label="type.tname"
-                      :value="type.tid">
-                    </el-option>
-                  </el-select>
-                </el-form-item>
+        <el-form-item label="商品类别">
+          <el-select size="big" v-model="ruleForm.tid" clearable placeholder="请选择" filterable>
+            <el-option
+              v-for="type in types"
+              :key="type.tid"
+              :label="type.tname"
+              :value="type.tid">
+            </el-option>
+          </el-select>
+        </el-form-item>
         <el-form-item label="商品id">
           <el-input v-model="ruleForm.pid" placeholder="请输入商品id"></el-input>
         </el-form-item>
@@ -143,14 +143,14 @@
           <el-input v-model="ruleForm.pcount"></el-input>
         </el-form-item>
 
-<!--        <el-form-item>-->
-<!--          <el-select size="mini" v-model="ruleForm.pshelf" v-on:change="handleSearch()">-->
-<!--            <el-option label="请选择性别" value=""></el-option>-->
-<!--            <el-option label="已上架" value="已上架"></el-option>-->
-<!--            <el-option label="未上架" value="未上架"></el-option>-->
-<!--          </el-select>-->
-<!--          -->
-<!--        </el-form-item>-->
+        <!--        <el-form-item>-->
+        <!--          <el-select size="mini" v-model="ruleForm.pshelf" v-on:change="handleSearch()">-->
+        <!--            <el-option label="请选择性别" value=""></el-option>-->
+        <!--            <el-option label="已上架" value="已上架"></el-option>-->
+        <!--            <el-option label="未上架" value="未上架"></el-option>-->
+        <!--          </el-select>-->
+        <!--          -->
+        <!--        </el-form-item>-->
         <span slot="footer" class="dialog-footer">
             <el-button @click="emptyUserData()" size="medium">取 消</el-button>
             <el-button @click="addUser('ruleForm')" type="primary" size="medium">确 定</el-button>
@@ -194,15 +194,12 @@
     </el-form>
     <br>
 
-    <el-pagination
-      background
-      :disabled="disablePage"
-      :current-page.sync="currentPage"
-      small
-      layout="prev, pager, next"
-      :page-size="pageSize"
-      :total="total"
-      @current-change="handlePageChange">
+    <el-pagination @size-change="handleSizeChange"
+                   @current-change="handleCurrentChange"
+                   :current-page="currentPage"
+                   :page-sizes="pageSizes"
+                   :page-size="PageSize" layout="total, sizes, prev, pager, next, jumper"
+                   :total="total">
     </el-pagination>
   </div>
 </template>
@@ -233,20 +230,25 @@
         total: 0,
         disablePage: false,
         multipleSelection: [],
+        // 默认显示第几页
+        currentPage:1,
+        // 个数选择器
+        pageSizes:[5,10,15,20],
+        // 默认每页显示的条数
+        PageSize:5,
 
       };
     },
 
     created() {
       let postData1 = this.qs.stringify({
-        page: this.currentPage,
         pname: this.search1,
         tid: this.search2
       });
       console.log(postData1);
       this.axios({
         method: 'post',
-        url: '/warehouse/selectTwPage',
+        url: '/warehouse/selectTwPage1',
         data: postData1
       }).then(response => {
         this.tableData = response.data;
@@ -255,8 +257,8 @@
       });
 
       let postData = this.qs.stringify({
-        tid: this.search1,
-        pid: this.search2
+        pname: this.search1,
+        tid: this.search2
       });
       this.axios({
         method: 'post',
@@ -274,6 +276,20 @@
 
 
     methods: {
+
+      // 分页
+      // 每页显示的条数
+      handleSizeChange(val) {
+        // 改变每页显示的条数
+        this.PageSize=val
+        // 在改变每页显示的条数时，要将页码显示到第一页
+        this.currentPage=1
+      },
+      // 显示第几页
+      handleCurrentChange(val) {
+        // 改变默认的页数
+        this.currentPage=val
+      },
       selecttname(){
         console.log('type',this.types)
         const item = this.types.find(item1=> item1.tid === this.ruleForm.tid)
@@ -287,8 +303,8 @@
           method:'post',
           url: '/type/getAllTid'
         }).then(function(resp){
-         vm.types = resp.data;
-           console.log(resp.data);
+          vm.types = resp.data;
+          console.log(resp.data);
 
         })
       },
@@ -297,17 +313,13 @@
        * 分页
        */
       handlePageChange() {
-
         let postData = this.qs.stringify({
-          page: this.currentPage,
           pname: this.search1,
           tid: this.search2
         });
-
-        console.log(`当前页: ${this.currentPage}`);
         this.axios({
           method: 'post',
-          url: '/warehouse/selectTwPage',
+          url: '/warehouse/selectTwPage1',
           data: postData
         }).then(response => {
           this.tableData = response.data;
@@ -359,8 +371,8 @@
        */
       getRowCount() {
         let postData = this.qs.stringify({
-          userId: this.search1,
-          userNickname: this.search2
+          pname: this.search1,
+          tid: this.search2
         });
         this.axios({
           method: 'post',
@@ -374,24 +386,8 @@
       },
 
       handleSearch() {
-        let postData = this.qs.stringify({
-          pname: this.search1,
-          tid: this.search2
-        });
-        this.axios({
-          method: 'post',
-          url: '/warehouse/getRowCount',
-          data: postData
-        }).then(response => {
-          this.total = response.data;
-          let countPage = Math.ceil(this.total/10);
-          if (countPage <= this.currentPage) {
-            this.currentPage = countPage;
-          }
-          this.handlePageChange();
-        }).catch(error => {
-          console.log(error);
-        });
+        this.getRowCount();
+        this.handlePageChange();
       },
 
       handleEdit(index, row) {
@@ -446,11 +442,6 @@
             data: postData
           }).then(response => {
             this.getRowCount();
-            if (this.total % 10 == 1 && this.currentPage >= 1) {
-              if (this.total / 10 < this.currentPage) {
-                this.currentPage = this.currentPage - 1;
-              }
-            }
             this.handlePageChange();
 
             this.$message({
@@ -500,11 +491,6 @@
             data: postData
           }).then(response => {
             this.getRowCount();
-            if (this.total % 10 == 1 && this.currentPage >= 1) {
-              if (this.total / 10 < this.currentPage) {
-                this.currentPage = this.currentPage - 1;
-              }
-            }
             this.handlePageChange();
 
             this.$message({

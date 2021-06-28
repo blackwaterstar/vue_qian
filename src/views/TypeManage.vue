@@ -36,7 +36,7 @@
 
     <el-table
       ref="multipleTable"
-      :data="tableData"
+      :data="tableData.slice((currentPage-1)*PageSize,currentPage*PageSize)"
       border
       highlight-current-row
       style="width: 100%"
@@ -126,15 +126,12 @@
       </el-dialog>
     </el-form>
     <br>
-    <el-pagination
-      background
-      :disabled="disablePage"
-      :current-page.sync="currentPage"
-      small
-      layout="prev, pager, next"
-      :page-size="pageSize"
-      :total="total"
-      @current-change="handlePageChange">
+    <el-pagination @size-change="handleSizeChange"
+                   @current-change="handleCurrentChange"
+                   :current-page="currentPage"
+                   :page-sizes="pageSizes"
+                   :page-size="PageSize" layout="total, sizes, prev, pager, next, jumper"
+                   :total="total">
     </el-pagination>
   </div>
 </template>
@@ -160,12 +157,17 @@
         total: 0,
         disablePage: false,
         multipleSelection: [],
+        // 默认显示第几页
+        currentPage:1,
+        // 个数选择器
+        pageSizes:[5,10,15,20],
+        // 默认每页显示的条数
+        PageSize:5,
       };
     },
 
     created() {
       let postData1 = this.qs.stringify({
-        page: this.currentPage,
         tname: this.search1,
         tid: this.search2
 
@@ -173,7 +175,7 @@
       console.log(postData1);
       this.axios({
         method: 'post',
-        url: '/type/selectTwPage',
+        url: '/type/selectTwPage1',
         data: postData1
       }).then(response => {
         this.tableData = response.data;
@@ -214,21 +216,30 @@
         })
       },
 
+      // 分页
+      // 每页显示的条数
+      handleSizeChange(val) {
+        // 改变每页显示的条数
+        this.PageSize=val
+        // 在改变每页显示的条数时，要将页码显示到第一页
+        this.currentPage=1
+      },
+      // 显示第几页
+      handleCurrentChange(val) {
+        // 改变默认的页数
+        this.currentPage=val
+      },
       /**
        * 分页
        */
       handlePageChange() {
-
         let postData = this.qs.stringify({
-          page: this.currentPage,
           tname: this.search1,
           tid: this.search2
         });
-
-        console.log(`当前页: ${this.currentPage}`);
         this.axios({
           method: 'post',
-          url: '/type/selectTwPage',
+          url: '/type/selectTwPage1',
           data: postData
         }).then(response => {
           this.tableData = response.data;
@@ -291,25 +302,10 @@
         });
       },
 
+
       handleSearch() {
-        let postData = this.qs.stringify({
-          tname: this.search1,
-          tid: this.search2
-        });
-        this.axios({
-          method: 'post',
-          url: '/type/getRowCount',
-          data: postData
-        }).then(response => {
-          this.total = response.data;
-          let countPage = Math.ceil(this.total/10);
-          if (countPage <= this.currentPage) {
-            this.currentPage = countPage;
-          }
-          this.handlePageChange();
-        }).catch(error => {
-          console.log(error);
-        });
+        this.getRowCount();
+        this.handlePageChange();
       },
 
       handleEdit(index, row) {
@@ -362,11 +358,6 @@
             data: postData
           }).then(response => {
             this.getRowCount();
-            if (this.total % 10 == 1 && this.currentPage >= 1) {
-              if (this.total / 10 < this.currentPage) {
-                this.currentPage = this.currentPage - 1;
-              }
-            }
             this.handlePageChange();
 
             this.$message({
@@ -417,11 +408,6 @@
             data: postData
           }).then(response => {
             this.getRowCount();
-            if (this.total % 10 == 1 && this.currentPage >= 1) {
-              if (this.total / 10 < this.currentPage) {
-                this.currentPage = this.currentPage - 1;
-              }
-            }
             this.handlePageChange();
 
             this.$message({

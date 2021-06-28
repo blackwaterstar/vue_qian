@@ -69,6 +69,7 @@ export default new Router({
       }
 
     },
+
     {
       path:'/typeManage',
       name:'TypeManage',
@@ -78,6 +79,7 @@ export default new Router({
       }
 
     },
+
     {
       path:'/adminHome',
       name:'adminHome',
@@ -96,6 +98,7 @@ export default new Router({
       }
 
     },
+
     {
       path:'/warehouseManage',
       name:'Warehouse',
@@ -105,6 +108,7 @@ export default new Router({
       }
 
     },
+
     {
       path:'/productinfo',
       name:'ProductInfo',
