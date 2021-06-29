@@ -73,7 +73,7 @@
                 });
                 setTimeout(function(){
 
-                  vm.$router.push("/adminHome");
+                  vm.$router.push("/userManage");
 
                 },2000)
               }else{

@@ -1,7 +1,7 @@
 <template>
   <el-row class="tac">
     <el-col :span="12">
-      <h5>默认颜色</h5>
+      <h3>后台管理</h3>
       <el-menu
         default-active="this.$route.path"
         class="el-menu-vertical-demo"

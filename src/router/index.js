@@ -17,6 +17,7 @@ import TypeManage from "../views/TypeManage";
 import AdminLogin from "../views/AdminLogin";
 import Yorders from "../components/Yorders";
 import Wallet from "../components/Wallet";
+import OrdersManage from "../views/OrdersManage";
 // 安装路由
 Vue.use(Router);
 
@@ -69,6 +70,15 @@ export default new Router({
       }
 
     },
+    {
+      path:'/ordersManage',
+      name:'OrdersManage',
+      component:OrdersManage,
+      meta: {
+        keepAlive: true
+      }
+
+    },
 
     {
       path:'/typeManage',
@@ -80,15 +90,15 @@ export default new Router({
 
     },
 
-    {
-      path:'/adminHome',
-      name:'adminHome',
-      component:adminHome,
-      meta: {
-        keepAlive: true
-      }
-
-    },
+    // {
+    //   path:'/adminHome',
+    //   name:'adminHome',
+    //   component:adminHome,
+    //   meta: {
+    //     keepAlive: true
+    //   }
+    //
+    // },
     {
       path:'/productManage',
       name:'ProductManage',

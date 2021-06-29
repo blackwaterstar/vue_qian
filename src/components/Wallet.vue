@@ -26,7 +26,6 @@
     name: "Pay",
     data(){
       return {
-        dialogTableVisible: false,
         dialogFormVisible: false,
         form: {
           money: '',
@@ -62,10 +61,11 @@
        * 清空绑定数据
        */
       emptyUserData() {
-        this.dialogAdd = false;
+        this.dialogFormVisible = false;
         this.form = {
           money: null
         };
+        this.getData();
       },
       topUp() {
         if (this.form.money== null) {
@@ -89,8 +89,6 @@
             message: '充值成功!'
           });
           this.emptyUserData();
-          this.dialogFormVisible = false;
-          this.$router.go(0);
         }).catch(error => {
           console.log(error);
         });
